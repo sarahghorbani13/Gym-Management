@@ -1,7 +1,10 @@
 class halls :
     def __init__ (self) :
         self.halls_list = []
-    
+        self.add ("red", "10", "dumbbell , mat")
+        self.add ("green", "15", "mat, treadmill")
+        self.add ("blue", "20", "yoga block, mat")
+            
     def add (self, name, capacity, equipment) : # افزودن سالن
         for hall in self.halls_list :
             if (hall['name'] == name) :
@@ -10,7 +13,7 @@ class halls :
         if (capacity.isdigit() and int(capacity) >= 0) : 
             new_hall = {"name":name, "capacity":capacity, "equipment":equipment, "status":True}
             self.halls_list.append (new_hall)
-            print (f"\n{name} added!\n")
+            # print (f"\n{name} added!\n")
         else:
             print ("\ninvalid type of capacity!\n")        
 
@@ -68,29 +71,30 @@ class halls :
         return (enable_list)
 
 result = halls()
-result.add ("red", "10", "dumbbell , mat")
-result.add ("green", "15", "mat, treadmill")
-result.add ("blue", "20", "yoga block, mat")
-while True :
-    menu = ("1. add hall\n"
-            "2. editing hall\n"
-            "3. view halls\n"
-            "4. enabled or disabled the hall\n"
-            "5. exit")
-    num = input(menu+"\n\nplease select one item : ")
-    if (num=="1") :
-        name = input("\nenter name : ")
-        capacity = input("\nenter capacity : ")
-        equipment = input("\nenter equipment : ")
-        result.add (name, capacity, equipment)
-    elif (num=="2") :
-        result.edit()
-    elif (num=="3") :
-        result.view()
-    elif (num=="4") :
-        result.halls_status()
-    elif (num=="5") :
-        print("\nbye!\n")
-        break
-    else :
-        print ("\ninvalid choice!\n")
+# result.add ("red", "10", "dumbbell , mat")
+# result.add ("green", "15", "mat, treadmill")
+# result.add ("blue", "20", "yoga block, mat")
+if __name__ == "__main__" :
+    while True :
+        menu = ("1. add hall\n"
+                "2. editing hall\n"
+                "3. view halls\n"
+                "4. enabled or disabled the hall\n"
+                "5. exit")
+        num = input(menu+"\n\nplease select one item : ")
+        if (num=="1") :
+            name = input("\nenter name : ")
+            capacity = input("\nenter capacity : ")
+            equipment = input("\nenter equipment : ")
+            result.add (name, capacity, equipment)
+        elif (num=="2") :
+            result.edit()
+        elif (num=="3") :
+            result.view()
+        elif (num=="4") :
+            result.halls_status()
+        elif (num=="5") :
+            print("\nbye!\n")
+            break
+        else :
+            print ("\ninvalid choice!\n")
