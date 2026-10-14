@@ -24,6 +24,12 @@ def edit_user(users):
                 print("User updated.")
             else:
                 print("Invalid email.")
+            password = input("New password: ")
+            if validation_password(password):
+                user.password = password
+                print("Password updated.")
+            else:
+                print("Invalid password.")
             return
     print("User not found.")
 def toggle_user(users):
