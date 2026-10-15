@@ -1,13 +1,10 @@
-
-
-from Exceptions import validation_error, authentication_error, inactive_account_error
-from validators import validate_password
-from modules.wallet import Wallet
+from utils.Exceptions import validation_error, authentication_error, inactive_account_error
+from utils.validators import validate_password
+from services.wallet import Wallet
 
 
 class User:
     role = "user"
-
 
     def __init__(self, name, username, password, email, is_active=True, user_id=None):
         self.name = name
@@ -17,19 +14,16 @@ class User:
         self.is_active = is_active
         self.user_id = user_id
 
-
     def check_password(self, password):
         if self.password != password:
             raise authentication_error()
         return True
-
 
     def authenticate(self, password):
         self.check_password(password)
         if not self.is_active:
             raise inactive_account_error()
         return True
-
 
     @classmethod
     def login(cls, users, username, password):
@@ -43,7 +37,6 @@ class User:
         if not isinstance(new_password, str) or not validate_password(new_password):
             raise validation_error()
         self.password = new_password
-
 
     def information(self):
         return {
@@ -96,11 +89,11 @@ class Member(User):
 
     def __init__(self, name, username, password, email, is_active=True, user_id=None):
         super().__init__(name, username, password, email, is_active, user_id)
-        self.wallet = Wallet(username)
+        self.wallet = Wallet(user_id, username)
         self.subscription = None
 
     @property
     def subscription_status(self):
         if self.subscription is None:
             return "No subscription"
-        return self.subscription.get_status()
+        return self.subscription.status

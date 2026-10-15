@@ -3,7 +3,8 @@ from models.coach import CoachManager
 
 
 class Classes:
-    def __init__(self):
+    def __init__(self,halls):
+        self.halls = halls
         self.classes_list = []
 
     def add(self, name, sport, coach_id, hall, day, time, capacity):
@@ -12,8 +13,7 @@ class Classes:
                 print("\nthis class already exists!\n")
                 return
 
-        hall_method = Halls()
-        if hall not in hall_method.enable_halls():
+        if hall not in self.halls.enable_halls():
             print(f"\n{hall} does not exist or is not enable!\n")
             return
 

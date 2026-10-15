@@ -55,32 +55,32 @@ def get_workout_plan(class_id, member_id):
                 if plan is None:
                     plan = workout_plan(class_id, member_id)
                 exercise = create_exercise(parts[2], int(parts[3]), int(parts[4]), int(parts[5]), parts[6])
-                plan.exercises.append(exercise)
+                plan["exercises"].append(exercise)
     except ValueError:
         raise storage_error()
     return plan
 
 
 def save_workout_plan(plan):
-    if not plan.exercises:
+    if not plan["exercises"]:
         raise validation_error()
 
     new_lines = []
 
     for line in read_lines():
         parts = parsed_parts(line)
-        if parts[0] == str(plan.class_id) and parts[1] == str(plan.member_id):
+        if parts[0] == str(plan["class_id"]) and parts[1] == str(plan["member_id"]):
             continue
         new_lines.append(line)
 
-    for e in plan.exercises:
+    for e in plan["exercises"]:
         try:
             exercise = create_exercise(e["name"], e["sets"], e["reps"], e["rest"], e["description"])
         except (KeyError, TypeError, AttributeError):
             raise validation_error()
         line = "|".join([
-            str(plan.class_id),
-            str(plan.member_id),
+            str(plan["class_id"]),
+            str(plan["member_id"]),
             clean(exercise["name"]),
             str(exercise["sets"]),
             str(exercise["reps"]),

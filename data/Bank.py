@@ -3,23 +3,18 @@ from datetime import datetime
 
 
 def _current_shamsi_year():
-    # سال شمسی رو از میلادی حساب می‌کنیم (تقریبی)
     return datetime.now().year - 621
 
 
 def _current_shamsi_month():
-    # ماه میلادی و روز رو می‌گیریم
     month = datetime.now().month
     day = datetime.now().day
 
-    # اگه قبل از ۲۱ مارس باشیم، هنوز توی سال شمسی قبلیم
-    # چون سال شمسی از ۱ فروردین (تقریباً ۲۱ مارس) شروع می‌شه
     if (month, day) < (3, 21):
-        # ژانویه (1) → دی (10) ، فوریه (2) → بهمن (11) ، مارس (3) → اسفند (12)
         return month + 9
 
-    # آوریل (4) → فروردین (1) ، می (5) → اردیبهشت (2) ، ... ، دسامبر (12) → آذر (9)
     return (month - 3) % 12
+
 
 class API:
 

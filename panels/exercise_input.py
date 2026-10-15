@@ -1,73 +1,56 @@
-"""دریافت و اعتبارسنجی اطلاعات حرکات تمرینی در رابط متنی باشگاه."""
-
-
-# قرارداد این ماژول: وارد کردن 0 در هر ورودی به معنی انصراف است.
-# بنابراین زمان استراحت در این نسخه باید یک عدد صحیح مثبت باشد.
-
-
 def get_text(prompt, required=True):
-    """یک متن معتبر دریافت می‌کند؛ در صورت انصراف None برمی‌گرداند."""
     while True:
-        # strip فاصله‌های اضافی ابتدا و انتهای متن را حذف می‌کند.
         value = input(prompt).strip()
 
         if value == "0":
             return None
 
-        # توضیحات می‌تواند خالی باشد؛ نام حرکت نمی‌تواند خالی باشد.
         if value or not required:
             return value
 
-        print("این قسمت نمی‌تواند خالی باشد. دوباره تلاش کنید.")
+        print("This field cannot be empty. Try again.")
 
 
 def get_positive_int(prompt):
-    """یک عدد صحیح مثبت دریافت می‌کند؛ در صورت انصراف None برمی‌گرداند."""
     while True:
         raw_value = input(prompt).strip()
 
-        # پیش از تبدیل به عدد، فرمان انصراف بررسی می‌شود.
         if raw_value == "0":
             return None
 
         try:
             number = int(raw_value)
         except ValueError:
-            # مثلاً abc قابل تبدیل به عدد صحیح نیست.
-            print("لطفاً یک عدد صحیح وارد کنید.")
+            print("Please enter a valid integer.")
             continue
 
         if number > 0:
             return number
 
-        print("عدد باید بزرگ‌تر از صفر باشد.")
+        print("Number must be greater than zero.")
 
 
 def get_exercise():
-    """اطلاعات یک حرکت را می‌گیرد و دیکشنری حرکت یا None برمی‌گرداند."""
-    # با هر انصراف، بدون ساختن حرکت ناقص از تابع خارج می‌شویم.
-    name = get_text("نام حرکت (0: انصراف): ")
+    name = get_text("Exercise name (0: cancel): ")
     if name is None:
         return None
 
-    sets = get_positive_int("تعداد ست (0: انصراف): ")
+    sets = get_positive_int("Sets (0: cancel): ")
     if sets is None:
         return None
 
-    reps = get_positive_int("تعداد تکرار (0: انصراف): ")
+    reps = get_positive_int("Reps (0: cancel): ")
     if reps is None:
         return None
 
-    rest = get_positive_int("استراحت به ثانیه (0: انصراف): ")
+    rest = get_positive_int("Rest in seconds (0: cancel): ")
     if rest is None:
         return None
 
-    description = get_text("توضیحات (اختیاری، 0: انصراف): ", required=False)
+    description = get_text("Description (optional, 0: cancel): ", required=False)
     if description is None:
         return None
 
-    # ساخت حرکت فقط در صورت تکمیل همه ورودی‌ها انجام می‌شود.
-    # هیچ داده‌ای در این تابع داخل فایل ذخیره نمی‌شود.
     return {
         "name": name,
         "sets": sets,
@@ -78,42 +61,38 @@ def get_exercise():
 
 
 def get_exercises():
-    """چند حرکت دریافت می‌کند؛ خروجی لیست حرکات یا None در صورت لغو کل عملیات."""
     exercises = []
 
     while True:
-        print("\n1: افزودن حرکت | 2: پایان و دریافت فهرست | 0: لغو کل عملیات")
-        choice = input("گزینه: ").strip()
+        print("\n1: Add exercise | 2: Finish | 0: Cancel all")
+        choice = input("Choice: ").strip()
 
         if choice == "0":
-            # داده‌های این مرحله ذخیره نشده‌اند؛ فهرست موقت کنار گذاشته می‌شود.
             return None
 
         if choice == "2":
             if not exercises:
-                print("ابتدا دست‌کم یک حرکت اضافه کنید.")
+                print("Add at least one exercise first.")
                 continue
             return exercises
 
         if choice == "1":
             exercise = get_exercise()
             if exercise is None:
-                # انصراف از همین حرکت، نه لغو حرکت‌های تکمیل‌شده قبلی.
-                print("دریافت این حرکت لغو شد.")
+                print("Exercise input cancelled.")
                 continue
             exercises.append(exercise)
-            print("حرکت به فهرست موقت افزوده شد.")
+            print("Exercise added to the temporary list.")
             continue
 
-        print("گزینه نامعتبر است.")
+        print("Invalid option.")
 
 
 if __name__ == "__main__":
-    # این بخش فقط هنگام اجرای مستقیم ماژول اجرا می‌شود، نه هنگام import.
     result = get_exercises()
     if result is None:
-        print("عملیات لغو شد؛ اطلاعاتی ذخیره نشد.")
+        print("Operation cancelled; nothing was saved.")
     else:
-        print("فهرست حرکات آماده است:")
+        print("Exercise list is ready:")
         for index, exercise in enumerate(result, start=1):
             print(f"{index}. {exercise}")

@@ -49,6 +49,9 @@ class Coach:
             "is_active": self.is_active,
         }
 
+    def to_row(self):
+        return [self.coach_id, self.name, self.specialty, self.is_active]
+
     def activate(self):
         self.is_active = True
 
@@ -83,8 +86,13 @@ class CoachManager:
         return coaches
 
     def get_by_id(self, coach_id):
+        try:
+            coach_id = int(coach_id)
+        except (TypeError, ValueError):
+            raise not_found_error()
+
         for coach in self.get_all():
-            if coach.coach_id == int(coach_id):
+            if coach.coach_id == coach_id:
                 return coach
 
         raise not_found_error()
@@ -100,10 +108,15 @@ class CoachManager:
         self.storage.save([item.to_row() for item in coaches])
 
     def update_status(self, coach_id, is_active):
+        try:
+            coach_id = int(coach_id)
+        except (TypeError, ValueError):
+            raise not_found_error()
+
         coaches = self.get_all()
 
         for coach in coaches:
-            if coach.coach_id == int(coach_id):
+            if coach.coach_id == coach_id:
                 if is_active:
                     coach.activate()
                 else:
@@ -116,38 +129,32 @@ class CoachManager:
 
 
 class CoachPanel:
-    def __init__(
-        self, coach, class_manager, members=None, workout_handler=None
-    ):
+    def __init__(self, coach, class_manager, members=None, workout_handler=None):
         self.coach = coach
         self.class_manager = class_manager
         self.members = members if members is not None else []
         self.workout_handler = workout_handler
 
-    def my_classes(self):
+    def _get_classes(self):
         if isinstance(self.class_manager, list):
-            classes = self.class_manager
-        else:
-            classes = self.class_manager.classes_list
+            return self.class_manager
+        return self.class_manager.classes_list
 
+    def _my_classes(self):
+        classes = self._get_classes()
         result = []
 
         for gym_class in classes:
-            assigned = gym_class.get(
-                "coach_id", gym_class.get("coach")
-            )
+            assigned = gym_class.get("coach_id", gym_class.get("coach"))
 
-            if assigned == None:
+            if assigned is None:
                 continue
 
             assigned = str(assigned).strip().lower()
             coach_id = str(self.coach.coach_id).lower()
             coach_name = str(self.coach.name).strip().lower()
 
-            if (
-                assigned != coach_id
-                and assigned != coach_name
-            ):
+            if assigned != coach_id and assigned != coach_name:
                 continue
 
             if not gym_class.get("status", True):
@@ -157,7 +164,7 @@ class CoachPanel:
 
         return result
 
-    def show_members(self, gym_class):
+    def _show_members(self, gym_class):
         members = gym_class.get(
             "member_ids",
             gym_class.get(
@@ -165,7 +172,7 @@ class CoachPanel:
             ),
         )
 
-        if members == None:
+        if members is None:
             print(f"Registered members: {gym_class.get('register', 0)}")
             print("Member names are not available.")
             return
@@ -220,7 +227,7 @@ class CoachPanel:
             self._show_members(gym_class)
 
     def manage_workout_plans(self):
-        if self.workout_handler == None:
+        if self.workout_handler is None:
             print("The workout plan section is not connected yet.")
             return
 

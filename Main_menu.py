@@ -1,120 +1,111 @@
-def manager_cp(): # cp = control panel
+from panels.manager_panel import manager_panel
+from panels.member_panel import member_panel
+from services.wallet import Wallet
+from data.subscription_catalog import catalog
+from models.coach import CoachPanel, CoachManager
+from services.classes_management import Classes
+from services.halls_management import Halls
+from models.user import Manager, Trainer, Member
 
-    while True:
-        print("Dear Manager! Welcome to your panel!")
-        print("""
-***** Manager Control Panel ***
-------------------------------------
-1: Manage Users
-2: Manage Venues
-3: Manage Courses
-4: Subscriptions & Payments
-5: Reports
-6: Back to Main Menu
-------------------------------------
-""")
-        choice = input("Please enter your chosen section:")
 
-        if choice == "1":
-            print("User Managment Section\nPlease enter the user type chosen:")
+def manager_cp(wallets, users, halls, classes):
+    try:
+        manager_panel(wallets, catalog, halls, classes, users)
+    except (EOFError, KeyboardInterrupt):
+        print("\nReturning to main menu.")
+        return
 
-        elif choice == "2":
-            print("Venue Managment Section\nPlease enter your chosen section")
 
-        elif choice == "3":
-            print("Course Management Section\nPlease enter your chosen section:")
+def trainer_cp(class_manager, members):
+    try:
+        coach_manager = CoachManager()
+        coaches = coach_manager.get_all()
 
-        elif choice == "4":
-            print("Subscriptions & Payments Management Section\nPlease enter your chosen section:")
-
-        elif choice == "5":
-            print("Reports Section\nPlease enter your chosen section:")
-
-        elif choice == "6":
+        if not coaches:
+            print("No coaches available.")
             return
-        
-        else:
-            print("Invalid Option! Please enter a number between 1 to 6.")
-                
-        # if choice == "1":
-        #     manager_activate_subscription(wallets, catalog)
-        # elif choice == "2":
-        #     show_all_active_subscriptions(wallets)
-        # elif choice == "3":
-        #     show_income_by_subscription_type(wallets)
-        # elif choice == "4":
-        #     show_total_income(wallets)
-        # elif choice == "5":
-        #     break
-        # else:
-        #     print("Invalid choice !")
 
-def trainer_cp():
-    
-    while True:
-            print("Dear Trainer! Welcome to your Panel!")
-            print("""
-    ***** Trainer Control Panel ***
-    ------------------------------------
-    1: View Courses
-    2: Workout Plans
-    3: Back to Main Menu
-    ------------------------------------
-    """)
-            choice = input("Please enter your chosen section:")
-    
-            if choice == "1":
-                print("Courses Section\nTo view your courses,Please enter your chosen course:")
+        print("\n--- Coaches ---")
+        for i, coach in enumerate(coaches, 1):
+            print(f"{i}. {coach.name} ({coach.specialty})")
 
-            elif choice == "2":
-                print("Workout Plans\nPlease enter your chosen section:")
+        raw = input("Choose a coach number (0: back): ").strip()
+        if raw == "0":
+            return
 
-            elif choice == "3":
-                return
-            
-            else:
-                print("Invalid Option! Please enter a number between 1 to 3.")
+        try:
+            index = int(raw)
+        except ValueError:
+            print("Invalid input !")
+            return
 
-def member_dashboard():
+        if index < 1 or index > len(coaches):
+            print("Invalid choice !")
+            return
 
-    while True:
-            print("Dear Member! Welcome to your panel!")
-            print("""
-    ***** Member Dashboard ***
-    ------------------------------------
-    1: Profile & Subscriptions
-    2: Wallet
-    3: Payments
-    4: Courses
-    5: Workout Plans
-    6: Back to Main Menu
-    ------------------------------------
-    """)
-            choice = input("Please enter your chosen section:")
-    
-            if choice == "1":
-                print("Profile & Subscriptions")
+        coach = coaches[index - 1]
+        panel = CoachPanel(coach, class_manager, members)
+        panel.run()
 
-            elif choice == "2":
-                print("Wallet")
+    except (EOFError, KeyboardInterrupt):
+        print("\nReturning to main menu.")
+        return
+    except Exception as error:
+        print(f"Unexpected error: {error}")
 
-            elif choice == "3":
-                print("Payments")
 
-            elif choice == "4":
-                print("Courses")
+def member_dashboard(wallets):
+    if not wallets:
+        print("No members registered.")
+        return
 
-            elif choice == "5":
-                print("Workout Plans")
+    try:
+        print("\n--- Members ---")
+        for i, w in enumerate(wallets, 1):
+            print(f"{i}. {w.username}")
 
-            elif choice == "6":
-                return
-            
-            else:
-                print("Invalid Option! Please enter a number between 1 to 6.")
+        raw = input("Choose a member number (0: back): ").strip()
+        if raw == "0":
+            return
+
+        try:
+            index = int(raw)
+        except ValueError:
+            print("Invalid input !")
+            return
+
+        if index < 1 or index > len(wallets):
+            print("Invalid choice !")
+            return
+
+        wallet = wallets[index - 1]
+        member_panel(wallet, catalog)
+
+    except (EOFError, KeyboardInterrupt):
+        print("\nReturning to main menu.")
+        return
+    except Exception as error:
+        print(f"Unexpected error: {error}")
+
 
 def main_menu():
-    
+    users = [
+        Manager("Manager", "manager", "Manager@1", "manager@gym.com"),
+        Trainer("Trainer", "trainer", "Trainer@1", "trainer@gym.com"),
+        Member("Member", "member", "Member@1", "member@gym.com"),
+    ]
+
+    wallets = [
+        Wallet(3, "member", 1000000),
+    ]
+
+    halls = Halls()
+    halls.add("red", "10", "dumbbell , mat")
+    halls.add("green", "15", "mat, treadmill")
+    halls.add("blue", "20", "yoga block, mat")
+
+    classes = Classes()
+
     while True:
         print("""
                 ***** Welcome to Quera Gym! ***
@@ -125,18 +116,25 @@ def main_menu():
                 4: Exit
                 ------------------------------------
                 """)
-        choice = input("Please enter the chosen panel number:")
 
-        if choice == "1":
-            manager_cp()
-        elif choice == "2":
-            trainer_cp()
-        elif choice == "3":
-            member_dashboard()
-        elif choice == "4":
-            print("Exiting the program, Hope to see you again soon!")
-            break
-        else:
-            print("Invalid choice! Please enter a number between 1 to 4.")
+        try:
+            choice = input("Please enter the chosen panel number: ").strip()
+        except (EOFError, KeyboardInterrupt):
+            print("\nExiting the program. Hope to see you again soon!")
+            return
 
-    main_menu()
+        try:
+            if choice == "1":
+                manager_cp(wallets, users, halls, classes)
+            elif choice == "2":
+                trainer_cp(classes, users)
+            elif choice == "3":
+                member_dashboard(wallets)
+            elif choice == "4":
+                print("Exiting the program, Hope to see you again soon!")
+                return
+            else:
+                print("Invalid choice! Please enter a number between 1 to 4.")
+        except Exception as error:
+            print(f"Unexpected error: {error}")
+            print("Returning to main menu...")
