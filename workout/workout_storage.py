@@ -1,6 +1,6 @@
 import os
-from Exceptions import storage_error, validation_error
-
+from utils.Exceptions import storage_error, validation_error
+from workout_plan import workout_plan
 FILE_PATH = "workout_plans.txt"
 
 
@@ -24,8 +24,8 @@ def get_workout_plan(class_id, member_id):
                 raise storage_error()
             if parts[0] == str(class_id) and parts[1] == str(member_id):
                 if plan is None:
-                    plan = WorkoutPlan(class_id, member_id)
-                exercise = Exercise(parts[2], int(parts[3]), int(parts[4]), int(parts[5]), parts[6])
+                    plan = workout_plan(class_id, member_id)
+                exercise = create_exercise(parts[2], int(parts[3]), int(parts[4]), int(parts[5]), parts[6])
                 plan.exercises.append(exercise.to_dict())
     except ValueError:
         raise storage_error()
@@ -43,7 +43,7 @@ def save_workout_plan(plan):
 
     for e in plan.exercises:
         try:
-            exercise = Exercise(e["name"], e["sets"], e["reps"], e["rest"], e["description"])
+            exercise = create_exercise(e["name"], e["sets"], e["reps"], e["rest"], e["description"])
         except (KeyError, TypeError, AttributeError):
             raise validation_error()
         line = "|".join([

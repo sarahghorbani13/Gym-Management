@@ -1,4 +1,4 @@
-from Exceptions import validation_error
+from utils.Exceptions import validation_error
 
 
 def create_exercise(name, sets, reps, rest, description=""):

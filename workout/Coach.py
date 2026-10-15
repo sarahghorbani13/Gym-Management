@@ -1,5 +1,4 @@
-
-from Exceptions import (
+from utils.Exceptions import (
     duplicate_error,
     inactive_account_error,
     not_found_error,
