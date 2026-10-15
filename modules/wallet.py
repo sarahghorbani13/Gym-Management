@@ -12,20 +12,25 @@ class Wallet:
         self.__transactions = []
         self.__subscription = None
 
-    def get_username(self):
+    @property
+    def username(self):
         return self.__username
 
-    def get_balance(self):
+    @property
+    def balance(self):
         return self.__balance
 
-    def get_transactions(self):
+    @property
+    def transactions(self):
         return self.__transactions
 
-    def get_subscription(self):
+    @property
+    def subscription(self):
         return self.__subscription
 
-    def set_subscription(self, member_subscription):
-        # اشتراک جدید رو برای این عضو ثبت می‌کنیم
+    @subscription.setter
+    def subscription(self, member_subscription):
+        # اشتراک جدید رو برای عضو ثبت می‌کنیم
         self.__subscription = member_subscription
 
     def show_balance(self):
