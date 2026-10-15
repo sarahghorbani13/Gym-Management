@@ -104,7 +104,7 @@ def main_menu():
     halls.add("green", "15", "mat, treadmill")
     halls.add("blue", "20", "yoga block, mat")
 
-    classes = Classes()
+    classes = Classes(halls)
 
     while True:
         print("""
