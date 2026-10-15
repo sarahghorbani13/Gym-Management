@@ -77,7 +77,6 @@ def manager_activate_subscription(wallets, catalog):
 
 
 def show_all_active_subscriptions(wallets):
-    """همه‌ی اشتراک‌های فعال رو با نام کاربر و زمان باقی‌مونده نشون می‌دیم"""
 
     # اشتراک‌های فعال رو جمع می‌کنیم
     actives = []
@@ -105,7 +104,6 @@ def show_all_active_subscriptions(wallets):
 
 
 def show_income_by_subscription_type(wallets):
-    """درآمد رو به تفکیک نوع اشتراک حساب می‌کنیم"""
 
     # یه دیکشنری خالی برای جمع درآمد هر پلن می‌سازیم
     income = {}
@@ -153,7 +151,6 @@ def show_income_by_subscription_type(wallets):
 
 
 def show_total_income(wallets):
-    """درآمد کل سیستم رو حساب می‌کنیم (فقط خرید و تمدید اشتراک)"""
 
     # مجموع رو از صفر شروع می‌کنیم
     total = 0
