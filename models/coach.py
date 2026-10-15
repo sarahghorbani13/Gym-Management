@@ -4,23 +4,31 @@ from utils.Exceptions import (
     not_found_error,
     storage_error,
 )
-from Storage import Storage
+from utils.storage import Storage
+from functools import wraps
+from pathlib import Path
+
+LOG_PATH = Path(__file__).resolve().parent.parent / "gym.log"
+
+
+def _write_log(message):
+    try:
+        with open(LOG_PATH, "a", encoding="utf-8") as file:
+            file.write(message + "\n")
+    except OSError:
+        pass
 
 
 def log_action(func):
+    @wraps(func)
     def wrapper(*args, **kwargs):
         try:
             result = func(*args, **kwargs)
         except Exception:
-            try:
-                with open("gym.log", "a", encoding="utf-8") as file:
-                    file.write(f"{func.__name__}: failed\n")
-            except OSError:
-                pass
-                
-        with open("gym.log", "a", encoding="utf-8") as file:
-            file.write(f"{func.__name__}: successful\n")
+            _write_log(f"{func.__name__}: failed")
+            raise
 
+        _write_log(f"{func.__name__}: successful")
         return result
 
     return wrapper
@@ -40,14 +48,6 @@ class Coach:
             "specialty": self.specialty,
             "is_active": self.is_active,
         }
-
-    def to_row(self):
-        return [
-            self.coach_id,
-            self.name,
-            self.specialty,
-            self.is_active,
-        ]
 
     def activate(self):
         self.is_active = True
@@ -124,7 +124,7 @@ class CoachPanel:
         self.members = members if members is not None else []
         self.workout_handler = workout_handler
 
-    def _my_classes(self):
+    def my_classes(self):
         if isinstance(self.class_manager, list):
             classes = self.class_manager
         else:
@@ -157,7 +157,7 @@ class CoachPanel:
 
         return result
 
-    def _show_members(self, gym_class):
+    def show_members(self, gym_class):
         members = gym_class.get(
             "member_ids",
             gym_class.get(
@@ -249,4 +249,3 @@ class CoachPanel:
                 break
             else:
                 print("Invalid option.")
-```
