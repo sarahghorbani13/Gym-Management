@@ -1,7 +1,5 @@
 from HallsManagement import halls
-hallmethod = halls()
-# from Coaches import coach
-# coachmethod = coach()
+from workout.Coach import CoachManager
 
 class classes :
     def __init__(self):
@@ -12,12 +10,14 @@ class classes :
             if (cls['name'] == name) :
                 print ("\nthis class already exists!\n")
                 return
+        hallmethod = halls()
         if hall not in hallmethod.enable_halls() :
             print (f"\n{hall} does not exist or is not enable!\n")
             return
-        # if coach not in coachmethod.enable_coaches() :
-        #         print (f"\n{coach} does not exist or is not enable!\n")
-        #         return
+        coach = CoachManager().get_by_id(coach_id)
+        if not coach.is_active :
+            raise ValueError("coach is not enable.")
+            return
         new_cls = {"name":name, "sport":sport, "coach":coach, "hall":hall, "day":day, "time":time, "capacity":int(capacity), "register":0, "status":True}
         self.classes_list.append (new_cls)
         # print (f"\n{name} added!\n")
@@ -34,9 +34,9 @@ class classes :
                     newname = input ("\nnew name : ")
                     newsport = input ("\nnew sport : ")
                     newcoach = input ("\nnew coach : ")
-                    # if newcoach not in coachmethod.enable_coaches() :
-                    #     print (f"\n{newcoach} does not exist or is not enable!\n")
-                    #     return
+                    if not coach.is_active :
+                        raise ValueError("coach is not enable.")
+                        return
                     newhall = input ("\nnew hall : ")
                     if newhall not in hallmethod.enable_halls() :
                         print (f"\n{newhall} does not exist or is not enable!\n")
@@ -91,9 +91,9 @@ class classes :
         return (enable_list)
 
 result = classes()
-result.add ("trx", "hard", "ali" , "red", "monday", "10:00 am", "10")
-result.add ("yoga", "soft", "reza" , "green", "friday", "08:00 am", "15")
-result.add ("handball", "hard", "zahra" , "blue", "sunday", "07:00 pm", "20")
+# result.add ("trx", "hard", "ali" , "red", "monday", "10:00 am", "10")
+# result.add ("yoga", "soft", "reza" , "green", "friday", "08:00 am", "15")
+# result.add ("handball", "hard", "zahra" , "blue", "sunday", "07:00 pm", "20")
 if __name__ == "__main__" :
     while True :
         menu = ("1. add class\n"
