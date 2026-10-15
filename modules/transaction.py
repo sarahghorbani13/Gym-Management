@@ -8,13 +8,14 @@ def f_now():
 
 class Transaction:
 
-    def __init__(self, type_tx, amount, comment, tracking_number):
+    def __init__(self, type_tx, amount, comment, tracking_number, subscription_name=None):
         # اطلاعات تراکنش رو ذخیره می‌کنیم
         self.__type = type_tx
         self.__amount = amount
         self.__date = f_now()
         self.__comment = comment
         self.__tracking_number = tracking_number
+        self.subscription_name = subscription_name
 
     @property
     def type(self):
