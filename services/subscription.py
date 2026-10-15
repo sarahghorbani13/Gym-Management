@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 
 
-class Subscription:
+class MemberSubscription:
 
     def __init__(self, name, duration_months, price):
         # اطلاعات اشتراک رو ذخیره می‌کنیم
@@ -64,7 +64,7 @@ class Subscription:
     def renew(self, duration_months):
         # اگه اشتراک فعال بود، از تاریخ پایان ادامه می‌دیم
         # وگرنه از امروز دوباره شروع می‌کنیم
-        if self.is_active():
+        if self.is_active:    
             base = self.__end_date
         else:
             base = datetime.now()
@@ -77,4 +77,4 @@ class Subscription:
         # اشتراک رو به شکل متن قابل چاپ برمی‌گردونیم
         return (f"[{self.__name}] from {self.__start_date.strftime('%Y-%m-%d')} "
                 f"to {self.__end_date.strftime('%Y-%m-%d')} | "
-                f"status: {self.get_status()}")
+                f"status: {self.status}")    
