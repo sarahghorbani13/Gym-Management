@@ -1,9 +1,9 @@
 class halls :
     def __init__ (self) :
         self.halls_list = []
-        self.add ("red", "10", "dumbbell , mat")
-        self.add ("green", "15", "mat, treadmill")
-        self.add ("blue", "20", "yoga block, mat")
+        # self.add ("red", "10", "dumbbell , mat")
+        # self.add ("green", "15", "mat, treadmill")
+        # self.add ("blue", "20", "yoga block, mat")
             
     def add (self, name, capacity, equipment) : # افزودن سالن
         for hall in self.halls_list :
