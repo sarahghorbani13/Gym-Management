@@ -29,18 +29,23 @@ def manager_panel(wallets, catalog):
         # بر اساس انتخاب، تابع مربوطه رو صدا می‌زنیم
         if choice == "1":
                 print("User Managment Section\nPlease enter the user type chosen:")
-        
+        #محل فراخوانی User management و view users
+
         elif choice == "2":
             print("Venue Managment Section\nPlease enter your chosen section")
-        
+        #محل فراخوانی Hall management
+
         elif choice == "3":
             print("Course Management Section\nPlease enter your chosen section:")
-        
+        #محل فراخوانی class managment
+
         elif choice == "4":
             print("Subscriptions & Payments Management Section\nPlease enter your chosen section:")
-        
+        #محل فراخوانی اشتراک ها
+
         elif choice == "5":
             print("Reports Section\nPlease enter your chosen section:")
+        #محل فراخوانی گزارش 
             
         # در صورت انتخاب عدد شش به منوی اصلی باز میگردد
         elif choice == "6":
