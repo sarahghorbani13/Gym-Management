@@ -1,4 +1,4 @@
-from Coach import Coach, CoachManager
+from models.coach import Coach, CoachManager
 
 
 def seed_coaches():
