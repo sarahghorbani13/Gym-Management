@@ -4,13 +4,14 @@ from modules.member_subscription import MemberSubscription
 
 
 class Wallet:
-
-    def __init__(self, username, balance=0):
-        # اطلاعات پایه‌ی کیف پول رو ذخیره می‌کنیم
+    
+    def __init__(self, member_id, username, balance=0):
+        self.member_id = member_id
         self.__username = username
         self.__balance = balance
         self.__transactions = []
         self.__subscription = None
+
 
     @property
     def username(self):
