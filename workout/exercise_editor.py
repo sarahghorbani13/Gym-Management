@@ -1,4 +1,4 @@
-"""مدیریت حرکات یک برنامه تمرینی"""
+
 
 from copy import deepcopy
 
@@ -6,29 +6,29 @@ from .exercise_input import get_exercise, get_positive_int, get_text
 
 
 def show_exercises(exercises):
-    """فهرست حرکات را با شماره قابل انتخاب نمایش می‌دهد."""
+
     if not exercises:
-        print("هنوز حرکتی در فهرست نیست.")
+        print("No exercise in the list")
         return
 
     for number, exercise in enumerate(exercises, start=1):
         print(
             f"{number}. {exercise['name']} | "
-            f"ست: {exercise['sets']} | تکرار: {exercise['reps']} | "
-            f"استراحت: {exercise['rest']} ثانیه | "
-            f"توضیحات: {exercise['description'] or '-'}"
+            f"Set: {exercise['sets']} | Rep: {exercise['reps']} | "
+            f"Rest: {exercise['rest']} seconds | "
+            f"تDescription: {exercise['description'] or '-'}"
         )
 
 
 def choose_exercise(exercises):
-    """شماره حرکت را می‌گیرد و اندیس آن را برمی‌گرداند؛ انصراف: None."""
+
     if not exercises:
-        print("حرکتی برای انتخاب وجود ندارد.")
+        print("No exercise to be selected.")
         return None
 
     while True:
         show_exercises(exercises)
-        raw = input("شماره حرکت را وارد کنید (0: بازگشت): ").strip()
+        raw = input("Enter exercise number (0: Return): ").strip()
 
         if raw == "0":
             return None
@@ -36,26 +36,25 @@ def choose_exercise(exercises):
         try:
             number = int(raw)
         except ValueError:
-            print("شماره باید عدد صحیح باشد.")
+            print("Number must be integer")
             continue
 
         if 1 <= number <= len(exercises):
-            # شماره‌ها برای کاربر از ۱، ولی اندیس‌های لیست از ۰ شروع می‌شوند.
+
             return number - 1
 
-        print("شماره انتخاب‌شده در فهرست وجود ندارد.")
+        print("Entered number is not in the list.")
 
 
 def edit_exercise(exercise):
-    """ویرایش یکی از مشخصات حرکت؛ خروجی نسخه ویرایش‌شده یا None هنگام انصراف."""
-    # تا وقتی مربی تأیید نکرده، شیء اصلی تغییر نمی‌کند.
+
     updated = exercise.copy()
 
     while True:
-        print("\nویرایش حرکت:", updated['name'])
-        print("1: نام | 2: ست | 3: تکرار | 4: استراحت | 5: توضیحات")
-        print("6: تأیید ویرایش | 0: لغو ویرایش")
-        choice = input("گزینه: ").strip()
+        print("\nEdit exercise:", updated['name'])
+        print("1: Name | 2: Set | 3: Repition | 4: Rest | 5: Descriotion")
+        print("6: Confirm edition | 0: Cancel edition")
+        choice = input("Option: ").strip()
 
         if choice == "0":
             return None
@@ -64,43 +63,42 @@ def edit_exercise(exercise):
             return updated
 
         if choice == "1":
-            value = get_text("نام جدید (0: لغو دریافت): ")
+            value = get_text("New Name (0: cancel): ")
             key = "name"
         elif choice == "2":
-            value = get_positive_int("تعداد ست جدید (0: لغو دریافت): ")
+            value = get_positive_int("New Set (0: cancel): ")
             key = "sets"
         elif choice == "3":
-            value = get_positive_int("تکرار جدید (0: لغو دریافت): ")
+            value = get_positive_int("تکرار جدید (0: cancel): ")
             key = "reps"
         elif choice == "4":
-            value = get_positive_int("استراحت جدید به ثانیه (0: لغو دریافت): ")
+            value = get_positive_int("New rest duration (0: cancel): ")
             key = "rest"
         elif choice == "5":
-            value = get_text("توضیحات جدید (خالی مجاز، 0: لغو دریافت): ", required=False)
+            value = get_text("New description (can be empty، 0: Cancel): ", required=False)
             key = "description"
         else:
-            print("گزینه نامعتبر است.")
+            print("Invalid option")
             continue
 
         if value is None:
-            # صفر فقط ویرایش این فیلد را لغو می‌کند؛ دوباره به منوی ویرایش می‌رویم.
-            print("تغییر این فیلد انجام نشد.")
+
+            print("Edition cancelled")
             continue
 
         updated[key] = value
-        print("مقدار جدید ثبت موقت شد؛ برای تأیید گزینه 6 را بزنید.")
+        print("The new value has been temporarily recorded; press 6 to confirm.")
 
 
 def manage_exercises(existing=None):
-    """افزودن/ویرایش/حذف حرکات؛ خروجی لیست نهایی یا None در صورت لغو کل عملیات."""
-    # با کپی کار می‌کنیم تا انصراف، فهرست اولیه فراخواننده را تغییر ندهد.
+
     exercises = deepcopy(existing) if existing is not None else []
 
     while True:
-        print("\n--- مدیریت حرکات برنامه تمرینی ---")
-        print("1: مشاهده | 2: افزودن | 3: ویرایش | 4: حذف")
-        print("5: تأیید فهرست | 0: لغو کل تغییرات")
-        choice = input("گزینه: ").strip()
+        print("\n--- Training Program Exercises Management ---")
+        print("1: View | 2: Add: Edit | 4: Delete")
+        print("5: Confirm List | 0: Cancel all editions")
+        choice = input("Option: ").strip()
 
         if choice == "0":
             return None
@@ -113,7 +111,7 @@ def manage_exercises(existing=None):
             exercise = get_exercise()
             if exercise is not None:
                 exercises.append(exercise)
-                print("حرکت اضافه شد (هنوز در فایل ذخیره نشده است).")
+                print("Exercise added (not yet saved to the file).")
             continue
 
         if choice == "3":
@@ -130,25 +128,25 @@ def manage_exercises(existing=None):
             index = choose_exercise(exercises)
             if index is None:
                 continue
-            confirm = input("برای حذف حرکت، حرف y را وارد کنید: ").strip().lower()
+            confirm = input("To delete the move, enter y: ").strip().lower()
             if confirm == "y":
                 removed = exercises.pop(index)
-                print(f"حرکت {removed['name']} حذف شد (فقط از فهرست موقت).")
+                print(f"Exercise {removed['name']} Removed (only from the temporary list).")
             else:
-                print("حذف لغو شد.")
+                print("Deletion cancelled")
             continue
 
         if choice == "5":
             if not exercises:
-                print("برنامه باید دست‌کم یک حرکت داشته باشد.")
+                print("The program must have at least one exercise.")
                 continue
             return exercises
 
-        print("گزینه نامعتبر است.")
+        print("Invalid option")
 
 
 if __name__ == "__main__":
-    # صرفاً برای اجرای مستقیم؛ در اتصال به برنامه اصلی تابع manage_exercises فراخوانی می‌شود.
+
     result = manage_exercises()
     if result is None:
         print("تغییرات لغو شد؛ داده‌ای ذخیره نشد.")
