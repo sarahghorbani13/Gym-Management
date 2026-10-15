@@ -1,7 +1,6 @@
 import os
 import tempfile
 from pathlib import Path
-
 from models.exercise import create_exercise
 from models.workout_plan import workout_plan
 from utils.Exceptions import storage_error, validation_error
@@ -20,7 +19,6 @@ def read_lines():
 
 
 def write_lines_safely(lines):
-    # ابتدا در فایل موقت نوشته می‌شود تا شکست وسط کار، فایل قبلی را خراب نکند.
     temporary_path = None
     try:
         with tempfile.NamedTemporaryFile(
@@ -64,7 +62,6 @@ def get_workout_plan(class_id, member_id):
 
 
 def save_workout_plan(plan):
-    # برنامه‌ی خالی هیچ سطری ندارد و ذخیره‌ی آن فقط برنامه‌ی قبلی را پاک می‌کرد.
     if not plan.exercises:
         raise validation_error()
 
