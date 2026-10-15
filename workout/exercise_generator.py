@@ -2,12 +2,6 @@
 
 def iter_exercises(exercises, min_sets=1):
 
-
-    ورودی exercises: لیستی از دیکشنری‌های خروجی get_exercises
-    خروجی: مولد (generator) که دیکشنری هر حرکت واجد شرایط را تولید می‌کند.
-
-
-
     for exercise in exercises:
         
         if exercise["sets"] >= min_sets:
