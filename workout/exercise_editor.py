@@ -1,5 +1,3 @@
-
-
 from copy import deepcopy
 
 from .exercise_input import get_exercise, get_positive_int, get_text
