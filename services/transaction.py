@@ -15,7 +15,7 @@ class Transaction:
         self.__date = f_now()
         self.__comment = comment
         self.__tracking_number = tracking_number
-        self.subscription_name = subscription_name
+        self.__subscription_name = subscription_name
 
     @property
     def type(self):
@@ -37,6 +37,9 @@ class Transaction:
     def tracking_number(self):
         return self.__tracking_number
 
+    @property
+    def subscription_name(self):
+        return self.__subscription_name
 
     def __str__(self):
         # تراکنش رو به شکل متن قابل چاپ برمی‌گردونیم
