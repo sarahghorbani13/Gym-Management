@@ -16,20 +16,26 @@ class Transaction:
         self.__comment = comment
         self.__tracking_number = tracking_number
 
-    def get_type(self):
+    @property
+    def type(self):
         return self.__type
 
-    def get_amount(self):
+    @property
+    def amount(self):
         return self.__amount
 
-    def get_date(self):
+    @property
+    def date(self):
         return self.__date
 
-    def get_comment(self):
+    @property
+    def comment(self):
         return self.__comment
 
-    def get_tracking_number(self):
+    @property
+    def tracking_number(self):
         return self.__tracking_number
+
 
     def __str__(self):
         # تراکنش رو به شکل متن قابل چاپ برمی‌گردونیم
