@@ -70,12 +70,15 @@ class Wallet:
 
         # ورودی‌های عددی رو با try/except می‌گیریم که خطا ندیم
         try:
-            deposit = float(input("Enter amount of deposit : "))
+            deposit = float(input("Enter deposit amount: "))
+            if not (deposit > 0):
+                print("Deposit amount must be positive.")
+                return None
             card = input("Enter your card number (16 digits) : ")
             exp_month = int(input("Enter expiration month (1-12) : "))
             exp_year = int(input("Enter expiration year (1405-1410) : "))
             password = input("Enter your password (16 digits) : ")
-            cvv2 = input("Enter your cvv2 (3/4 digits) : ")
+            cvv2 = input("Enter your cvv2 (3 digits) : ")
         except ValueError:
             print("Invalid input !")
             return None
@@ -145,9 +148,12 @@ class Wallet:
             print(f"Not enough balance ! Your balance : {self.__balance} , price : {price}")
             return None
 
-        # مبلغ پلن رو از موجودی کم می‌کنیم
-        self.__balance = self.__balance - price
-
+        new_balance = self.__balance - price
+        if new_balance < 0:
+            print(f"Error : {payment_error()}")
+            return None
+        self.__balance = new_balance
+        
         # اگه اشتراک فعال داشتیم، تمدید می‌کنیم
         # وگرنه یه اشتراک جدید می‌سازیم
         if self.__subscription is not None and self.__subscription.is_active():
