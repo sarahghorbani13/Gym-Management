@@ -1,11 +1,11 @@
-from coach import Coach, CoachManager
+from Coach import Coach, CoachManager
 
 
 def seed_coaches():
     manager = CoachManager()
 
     if manager.get_all():
-        print("اطلاعات مربی‌ها از قبل وجود دارد")
+        print("Coach data already exists.")
         return
 
     coaches = [
@@ -16,7 +16,7 @@ def seed_coaches():
     for coach in coaches:
         manager.add(coach)
 
-    print("اطلاعات اولیه مربی‌ها ساخته شد")
+    print("Initial coach data created.")
 
 
 if __name__ == "__main__":
