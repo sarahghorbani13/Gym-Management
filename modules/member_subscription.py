@@ -16,45 +16,51 @@ class MemberSubscription:
         # (هر ماه رو ۳۰ روز در نظر می‌گیریم)
         self.__end_date = self.__start_date + timedelta(days=30 * self.__duration_months)
 
-    def get_name(self):
+    @property
+    def name(self):
         return self.__name
 
-    def get_duration_months(self):
+    @property
+    def duration_months(self):
         return self.__duration_months
 
-    def get_price(self):
+    @property
+    def price(self):
         return self.__price
 
-    def get_start_date(self):
+    @property
+    def start_date(self):
         return self.__start_date.strftime("%Y-%m-%d %H:%M:%S")
 
-    def get_end_date(self):
+    @property
+    def end_date(self):
         return self.__end_date.strftime("%Y-%m-%d %H:%M:%S")
 
+    @property
     def is_active(self):
         # زمان حال رو با تاریخ پایان مقایسه می‌کنیم
-        if datetime.now() < self.__end_date:
-            return True
-        return False
+        return datetime.now() < self.__end_date
 
-    def get_status(self):
-        # وضعیت اشتراک رو به فارسی برمی‌گردونیم
-        if self.is_active():
-            return "فعال"
-        return "منقضی شده"
+    @property
+    def status(self):
+        # وضعیت اشتراک رو برمی‌گردونیم
+        if self.is_active:
+            return "Active"
+        return "Expired"
 
+    @property
     def remaining_time(self):
         # اگه اشتراک منقضی شده بود، پیام مناسب می‌دیم
-        if not self.is_active():
-            return "اشتراک تموم شده"
+        if not self.is_active:
+            return "Subscription has ended"
 
         # زمان باقی‌مونده رو حساب می‌کنیم
         left = self.__end_date - datetime.now()
         days = left.days
         hours = left.seconds // 3600
         minutes = (left.seconds % 3600) // 60
-        return f"{days} روز و {hours} ساعت و {minutes} دقیقه مونده"
-
+        return f"{days} days , {hours} hours and {minutes} minutes left"
+        
     def renew(self, duration_months):
         # اگه اشتراک فعال بود، از تاریخ پایان ادامه می‌دیم
         # وگرنه از امروز دوباره شروع می‌کنیم
