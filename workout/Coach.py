@@ -17,8 +17,7 @@ def log_action(func):
                     file.write(f"{func.__name__}: failed\n")
             except OSError:
                 pass
-            raise
-
+                
         with open("gym.log", "a", encoding="utf-8") as file:
             file.write(f"{func.__name__}: successful\n")
 
@@ -167,18 +166,18 @@ class CoachPanel:
         )
 
         if members == None:
-            print(f"تعداد ثبت‌نام‌شده‌ها: {gym_class.get('register', 0)}")
-            print("فهرست نام اعضا موجود نیست.")
+            print(f"Registered members: {gym_class.get('register', 0)}")
+            print("Member names are not available.")
             return
 
         if not members:
-            print("عضوی برای این کلاس ثبت‌نام نکرده است.")
+            print("No members have registered for this class.")
             return
 
         for item in members:
             if isinstance(item, dict):
                 print(
-                    f"- {item.get('name', item.get('member_id', 'عضو ناشناس'))}"
+                    f"- {item.get('name', item.get('member_id', 'Unknown member'))}"
                 )
                 continue
 
@@ -194,35 +193,35 @@ class CoachPanel:
                     break
 
             if member:
-                print(f"- {member.get('name', 'نامشخص')}")
+                print(f"- {member.get('name', 'Unknown')}")
             else:
-                print(f"- شناسه عضو: {item}")
+                print(f"- Member ID: {item}")
 
     @log_action
     def show_classes(self):
         classes = self._my_classes()
 
         if not classes:
-            print("کلاسی برای شما ثبت نشده است.")
+            print("No classes are assigned to you.")
             return
 
         for gym_class in classes:
             print("-" * 35)
             print(
-                f"عنوان: {gym_class.get('name', gym_class.get('title', 'نامشخص'))}"
+                f"Title: {gym_class.get('name', gym_class.get('title', 'Unknown'))}"
             )
             print(
-                f"نوع ورزش: {gym_class.get('sport', gym_class.get('sport_type', 'نامشخص'))}"
+                f"Sport: {gym_class.get('sport', gym_class.get('sport_type', 'Unknown'))}"
             )
-            print(f"روز: {gym_class.get('day', 'نامشخص')}")
-            print(f"ساعت: {gym_class.get('time', 'نامشخص')}")
-            print(f"سالن: {gym_class.get('hall', 'نامشخص')}")
-            print(f"ظرفیت: {gym_class.get('capacity', 'نامشخص')}")
+            print(f"Day: {gym_class.get('day', 'Unknown')}")
+            print(f"Time: {gym_class.get('time', 'Unknown')}")
+            print(f"Hall: {gym_class.get('hall', 'Unknown')}")
+            print(f"Capacity: {gym_class.get('capacity', 'Unknown')}")
             self._show_members(gym_class)
 
     def manage_workout_plans(self):
         if self.workout_handler == None:
-            print("بخش برنامه تمرینی هنوز متصل نشده است.")
+            print("The workout plan section is not connected yet.")
             return
 
         self.workout_handler(
@@ -234,19 +233,20 @@ class CoachPanel:
             raise inactive_account_error()
 
         while True:
-            print("\n----- پنل مربی -------")
-            print("1. مشاهده کلاس‌های خود")
-            print("2. مدیریت برنامه تمرینی اعضا")
-            print("3. خروج")
+            print("\n----- Coach Panel -----")
+            print("1. View My Classes")
+            print("2. Manage Members' Workout Plans")
+            print("3. Exit")
 
-            choice = input("انتخاب شما: ").strip()
+            choice = input("Your choice: ").strip()
 
             if choice == "1":
                 self.show_classes()
             elif choice == "2":
                 self.manage_workout_plans()
             elif choice == "3":
-                print("بازگشت به منوی شروع")
+                print("Returning to the main menu.")
                 break
             else:
-                print("گزینه نامعتبر است")
+                print("Invalid option.")
+```
