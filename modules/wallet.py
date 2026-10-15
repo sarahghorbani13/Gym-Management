@@ -1,6 +1,8 @@
 from Bank import API
 from modules.transaction import Transaction
 from modules.member_subscription import MemberSubscription
+from Exceptions import .
+
 
 
 class Wallet:
