@@ -1,7 +1,6 @@
 from datetime import datetime
 
 
-# زمان حال رو به شکل متن برمی‌گردونیم
 def f_now():
     return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
@@ -9,7 +8,6 @@ def f_now():
 class Transaction:
 
     def __init__(self, type_tx, amount, comment, tracking_number, subscription_name=None):
-        # اطلاعات تراکنش رو ذخیره می‌کنیم
         self.__type = type_tx
         self.__amount = amount
         self.__date = f_now()
@@ -41,8 +39,17 @@ class Transaction:
     def subscription_name(self):
         return self.__subscription_name
 
+    def to_row(self):
+        return [
+            self.__type,
+            self.__amount,
+            self.__date,
+            self.__comment,
+            self.__tracking_number,
+            self.__subscription_name if self.__subscription_name else "-",
+        ]
+
     def __str__(self):
-        # تراکنش رو به شکل متن قابل چاپ برمی‌گردونیم
         return (f"[{self.__date}] {self.__type} , "
                 f"amount: {self.__amount} , "
                 f"tracking: {self.__tracking_number} , "

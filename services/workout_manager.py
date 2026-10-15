@@ -1,9 +1,8 @@
-from .exercise_editor import manage_exercises, show_exercises
-from .workout_service import load_plan, save_plan
+from panels.exercise_editor import manage_exercises, show_exercises
+from services.workout_service import load_plan, save_plan
 
 
 def _field(item, *names):
-
     for name in names:
         if isinstance(item, dict) and name in item:
             return item[name]
@@ -13,7 +12,6 @@ def _field(item, *names):
 
 
 def _choose(items, title, describe):
-
     if not items:
         print("No available items.")
         return None
@@ -35,7 +33,6 @@ def _choose(items, title, describe):
 
 
 def _coach_owns_class(coach, gym_class):
-
     if _field(coach, "is_active") is not True:
         return False
     if _field(gym_class, "status") is not True:
@@ -52,7 +49,6 @@ def _coach_owns_class(coach, gym_class):
 
 
 def run_workout_manager(coach, classes, members, *, eligible_members, access_check):
-
     if not callable(eligible_members) or not callable(access_check):
         raise TypeError("Enrollment and authorization callbacks are required.")
 
@@ -111,9 +107,9 @@ def run_workout_manager(coach, classes, members, *, eligible_members, access_che
                     if plan is None:
                         print("No workout plan exists for this member in this class.")
                     else:
-                        show_exercises(plan.exercises)
+                        show_exercises(plan["exercises"])
                     continue
-                updated = manage_exercises(plan.exercises if plan else None)
+                updated = manage_exercises(plan["exercises"] if plan else None)
                 if updated is None:
                     print("Changes cancelled; nothing was saved.")
                     continue
@@ -124,7 +120,6 @@ def run_workout_manager(coach, classes, members, *, eligible_members, access_che
 
 
 def make_workout_handler(*, eligible_members, access_check):
-
     if not callable(eligible_members) or not callable(access_check):
         raise TypeError("Both callbacks must be callable.")
 
