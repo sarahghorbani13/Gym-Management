@@ -54,39 +54,54 @@ def trainer_cp(class_manager, members):
         print(f"Unexpected error: {error}")
 
 
-def member_dashboard(wallets):
-    if not wallets:
-        print("No members registered.")
+def member_dashboard(wallets,user):
+    member_Wallet = None
+    for w in wallets:
+        if w.username == user.username:
+            member_Wallet = w
+            break
+
+    if not member_Wallet:
+        print("No wallet found for this member!")
         return
 
     try:
-        print("\n--- Members ---")
-        for i, w in enumerate(wallets, 1):
-            print(f"{i}. {w.username}")
-
-        raw = input("Choose a member number (0: back): ").strip()
-        if raw == "0":
-            return
-
-        try:
-            index = int(raw)
-        except ValueError:
-            print("Invalid input !")
-            return
-
-        if index < 1 or index > len(wallets):
-            print("Invalid choice !")
-            return
-
-        wallet = wallets[index - 1]
-        member_panel(wallet, catalog)
-
-    except (EOFError, KeyboardInterrupt):
-        print("\nReturning to main menu.")
+        member_panel(member_Wallet,catalog)
+    except(EOFError, KeyboardInterrupt):
+        print("\nReturning to main menu")
         return
     except Exception as error:
         print(f"Unexpected error: {error}")
+    
 
+def login(users, role):
+    max_attempts = 3
+    for attempt in range(max_attempts):
+        try:
+            username = input("\nUsername: ").strip()
+            password = input("\nPassword: ").strip()
+        except (EOFError, KeyboardInterrupt):
+            print("\nReturning to main menu.")
+            return None
+
+        for user in users:
+            if user.username == username and user.password == password:
+
+                if user.role == role:
+                    print(f"\nWelcome, {user.name}!\n")
+                    return user
+                else:
+                    print(f"\nYou are not a {role}!")
+                    return None
+
+        remaining_attempts = max_attempts - attempt - 1
+        if remaining_attempts > 0:
+            print(f"\nInvalid Entry! you have {remaining_attempts} attempts left.")
+        else:
+            print("\nToo many failed attempts.")
+            return None
+
+    return None
 
 def main_menu():
     users = [
@@ -125,16 +140,27 @@ def main_menu():
 
         try:
             if choice == "1":
-                manager_cp(wallets, users, halls, classes)
+                user = login(users,"manager")
+                if user:
+                    manager_cp(wallets, users, halls, classes)
+
             elif choice == "2":
-                trainer_cp(classes, users)
+                user = login(users,"trainer")
+                if user:
+                    trainer_cp(classes, users)
+
             elif choice == "3":
-                member_dashboard(wallets)
+                user = login(users,"member")
+                if user:
+                    member_dashboard(wallets,user
+                                     )
             elif choice == "4":
                 print("Exiting the program, Hope to see you again soon!")
                 return
+            
             else:
                 print("Invalid choice! Please enter a number between 1 to 4.")
+
         except Exception as error:
             print(f"Unexpected error: {error}")
             print("Returning to main menu...")
